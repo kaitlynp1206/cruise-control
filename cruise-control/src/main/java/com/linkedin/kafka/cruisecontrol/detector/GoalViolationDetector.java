@@ -228,8 +228,8 @@ public class GoalViolationDetector extends AbstractAnomalyDetector implements Ru
       _provisionResponse = provisionResponse;
       if (_isProvisionerEnabled) {
         // Right-size the cluster (if needed)
-        boolean isRightsized = _provisioner.rightsize(_provisionResponse.recommendationByRecommender());
-        if (isRightsized) {
+        ProvisionerState isRightsized = _provisioner.rightsize(_provisionResponse.recommendationByRecommender());
+        if (isRightsized.state() == ProvisionerState.State.IN_PROGRESS) {
           LOG.info("Actions have been taken on the cluster towards rightsizing.");
         }
       }
