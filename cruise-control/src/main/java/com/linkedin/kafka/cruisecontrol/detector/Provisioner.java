@@ -31,7 +31,7 @@ public interface Provisioner extends CruiseControlConfigurable {
    * </ul>
    *
    * @param recommendationByRecommender Provision recommendations provided by corresponding recommenders.
-   * @return {@code true} if actions have been taken on the cluster towards rightsizing, {@code false} otherwise.
+   *  @return ProvisionerState of actions taken on the cluster towards rightsizing.
    */
-  boolean rightsize(Map<String, ProvisionRecommendation> recommendationByRecommender);
+  ProvisionerState rightsize(Map<String, ProvisionRecommendation> recommendationByRecommender);
 }
