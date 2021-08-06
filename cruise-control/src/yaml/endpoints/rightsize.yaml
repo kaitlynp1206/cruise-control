@@ -1,0 +1,89 @@
+RightsizeEndpoint:
+  post:
+    operationId: rightsize
+    summary: Test the provisioner on Azure
+    parameters:
+      - name: broker_diff
+        in: query
+        description: The difference in broker count to rightsize towards.
+        schema:
+          type: integer
+          format: int32
+          default: -1
+      - name: partition_count
+        in: query
+        description: The target number of partitions to rightsize towards.
+        schema:
+          type: integer
+          format: int32
+          default: -1
+      - name: topic_name
+        in: query
+        description: The topic name of the partition resource to be rightsized.
+        schema:
+          type: string
+          default: null
+      - name: allow_capacity_estimation
+        in: query
+        description: Whether to allow capacity estimation when cruise-control is unable to obtain all per-broker capacity information.
+        schema:
+          type: boolean
+          default: true
+      - name: doAs
+        in: query
+        description: The user specified by a trusted proxy in that authentication model.
+        schema:
+          type: string
+      - name: exclude_recently_demoted_brokers
+        in: query
+        description: Whether to allow leader replicas to be moved to recently demoted brokers.
+        schema:
+          type: boolean
+          default: false
+      - name: get_response_schema
+        in: query
+        description: Whether to return JSON schema in response header or not.
+        schema:
+          type: boolean
+          default: false
+      - name: json
+        in: query
+        description: Whether to return in JSON format or not.
+        schema:
+          type: boolean
+          default: false
+      - name: verbose
+        in: query
+        description: Return detailed state information.
+        schema:
+          type: boolean
+          default: false
+    responses:
+      '200':
+        description: Successful add brokers response.
+        content:
+          application/json:
+            schema:
+              $ref: '../responses/optimizationResult.yaml#/OptimizationResult'
+          text/plain:
+            schema:
+              type: string
+      '202':
+        description: Add brokers in progress.
+        content:
+          application/json:
+            schema:
+              $ref: '../responses/progressResult.yaml#/ProgressResult'
+          text/plain:
+            schema:
+              type: string
+      # Response for all errors
+      default:
+        description: Error response.
+        content:
+          application/json:
+            schema:
+              $ref: '../responses/errorResponse.yaml#/ErrorResponse'
+          text/plain:
+            schema:
+              type: string

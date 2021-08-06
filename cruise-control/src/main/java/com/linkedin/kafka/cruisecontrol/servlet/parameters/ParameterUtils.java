@@ -59,7 +59,6 @@ import static com.linkedin.kafka.cruisecontrol.servlet.purgatory.ReviewStatus.DI
 import static com.linkedin.kafka.cruisecontrol.servlet.response.ResponseUtils.writeErrorResponse;
 import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
 
-
 /**
  * The util class for Kafka Cruise Control parameters.
  */
@@ -138,6 +137,9 @@ public final class ParameterUtils {
   public static final String TOPIC_BY_REPLICATION_FACTOR = "topic_by_replication_factor";
   public static final String NO_REASON_PROVIDED = "No reason provided";
   public static final String DO_AS = "doAs";
+  public static final String BROKER_DIFF = "broker_diff";
+  public static final String PARTITION_COUNT = "partition_count";
+  public static final String TOPIC_NAME = "topic_name";
 
   public static final String STOP_PROPOSAL_PARAMETER_OBJECT_CONFIG = "stop.proposal.parameter.object";
   public static final String BOOTSTRAP_PARAMETER_OBJECT_CONFIG = "bootstrap.parameter.object";
@@ -158,6 +160,7 @@ public final class ParameterUtils {
   public static final String ADMIN_PARAMETER_OBJECT_CONFIG = "admin.parameter.object";
   public static final String REVIEW_PARAMETER_OBJECT_CONFIG = "review.parameter.object";
   public static final String TOPIC_CONFIGURATION_PARAMETER_OBJECT_CONFIG = "topic.configuration.parameter.object";
+  public static final String RIGHTSIZE_PARAMETER_OBJECT_CONFIG = "rightsize.parameter.object";
 
   private ParameterUtils() {
   }
@@ -919,6 +922,38 @@ public final class ParameterUtils {
       throw new UserRequestException("The " + PARTITION_PARAM + " parameter cannot contain multiple dashes.");
     }
     return Integer.parseInt(boundaries[isUpperBound ? 1 : 0]);
+  }
+
+  /**
+   * Get the {@link #BROKER_DIFF} from the request.
+   *
+   * Default: -1
+   * @return The value of {@link #BROKER_DIFF} parameter.
+   */
+  static int brokerDiff(HttpServletRequest request) {
+    String parameterString = caseSensitiveParameterName(request.getParameterMap(), BROKER_DIFF);
+    return parameterString == null ? -1 : Integer.parseInt(request.getParameter(parameterString));
+  }
+
+  /**
+   * Get the {@link #PARTITION_COUNT} from the request.
+   *
+   * Default: -1
+   * @return The value of {@link #PARTITION_COUNT} parameter.
+   */
+  static int partitionCount(HttpServletRequest request) {
+    String parameterString = caseSensitiveParameterName(request.getParameterMap(), PARTITION_COUNT);
+    return parameterString == null ? -1 : Integer.parseInt(request.getParameter(parameterString));
+  }
+
+  /**
+   * Get the {@link #TOPIC_NAME} from the request.
+   *
+   * @return The value of {@link #TOPIC_NAME} parameter,
+   */
+  public static String topicName(HttpServletRequest request) {
+    String parameterString = caseSensitiveParameterName(request.getParameterMap(), TOPIC_NAME);
+    return request.getParameter(parameterString);
   }
 
   static Set<Integer> brokerIds(HttpServletRequest request, boolean isOptional) throws UnsupportedEncodingException {
